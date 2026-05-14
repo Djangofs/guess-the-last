@@ -1,4 +1,5 @@
 {
+  "enabledMcpjsonServers": ["github"],
   "extraKnownMarketplaces": {
     "nx-claude-plugins": {
       "source": {
