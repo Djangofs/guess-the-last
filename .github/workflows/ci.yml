@@ -79,6 +79,11 @@ jobs:
       - name: Set NX SHAs
         uses: nrwl/nx-set-shas@v4
 
+      - name: Run migrations
+        run: npx nx run api:db:migrate
+        env:
+          DATABASE_URL: postgresql://gtlp_user:gtlp_pass@localhost:5432/guess_the_last_pokemon
+
       - name: Integration tests
         run: npx nx affected -t integration-test
         env:

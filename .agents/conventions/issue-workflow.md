@@ -28,13 +28,13 @@ The more precise the issue, the less back-and-forth. Think of it as the spec in 
 
 The GitHub MCP server supports:
 
-| Operation | What the agent can do |
-|---|---|
-| Issues | Create, read, update, close, label, assign |
-| Pull Requests | Create, read, update, add reviewers |
-| Branches | Create from any ref |
-| Files | Read, create, update (single or batch commit) |
-| Repo | Read structure, search code |
+| Operation     | What the agent can do                         |
+| ------------- | --------------------------------------------- |
+| Issues        | Create, read, update, close, label, assign    |
+| Pull Requests | Create, read, update, add reviewers           |
+| Branches      | Create from any ref                           |
+| Files         | Read, create, update (single or batch commit) |
+| Repo          | Read structure, search code                   |
 
 ## Setup
 

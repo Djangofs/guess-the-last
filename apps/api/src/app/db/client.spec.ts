@@ -23,6 +23,9 @@ describe('createDb', () => {
     const { drizzle } = jest.requireMock('drizzle-orm/node-postgres');
     const pool = createPool('postgresql://user:pass@localhost:5432/db');
     createDb(pool as unknown as Pool);
-    expect(drizzle).toHaveBeenCalledWith(pool, expect.objectContaining({ schema: expect.any(Object) }));
+    expect(drizzle).toHaveBeenCalledWith(
+      pool,
+      expect.objectContaining({ schema: expect.any(Object) }),
+    );
   });
 });

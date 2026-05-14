@@ -41,12 +41,8 @@
           "name": "game_answer_pokemon_id_pokemon_id_fk",
           "tableFrom": "game",
           "tableTo": "pokemon",
-          "columnsFrom": [
-            "answer_pokemon_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["answer_pokemon_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
