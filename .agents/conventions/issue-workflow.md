@@ -38,10 +38,4 @@ The GitHub MCP server supports:
 
 ## Setup
 
-The MCP server requires a GitHub Personal Access Token with `repo` scope:
-
-Add it to your `.env` file (copied from `.env.example`):
-
-```bash
-GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
-```
+GitHub access is provided via the native Claude GitHub connector. No additional configuration needed in this project.

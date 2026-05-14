@@ -107,6 +107,28 @@
           "jestConfig": "apps/api/jest.integration.config.cts",
           "passWithNoTests": true
         }
+      },
+      "db:migrate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "drizzle-kit migrate",
+          "cwd": "{workspaceRoot}"
+        }
+      },
+      "db:generate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "drizzle-kit generate",
+          "cwd": "{workspaceRoot}"
+        }
+      },
+      "db:studio": {
+        "executor": "nx:run-commands",
+        "continuous": true,
+        "options": {
+          "command": "drizzle-kit studio",
+          "cwd": "{workspaceRoot}"
+        }
       }
     }
   },
