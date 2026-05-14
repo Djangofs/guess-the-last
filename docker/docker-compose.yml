@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:17-alpine
     ports:
-      - "5432:5432"
+      - '5433:5432'
     environment:
       POSTGRES_USER: gtlp_user
       POSTGRES_PASSWORD: gtlp_pass
@@ -10,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U gtlp_user -d guess_the_last_pokemon"]
+      test: ['CMD-SHELL', 'pg_isready -U gtlp_user -d guess_the_last_pokemon']
       interval: 5s
       timeout: 5s
       retries: 5

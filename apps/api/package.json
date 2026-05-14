@@ -102,10 +102,34 @@
       },
       "integration-test": {
         "executor": "@nx/jest:jest",
-        "outputs": ["{workspaceRoot}/apps/api/test-output/jest/integration-coverage"],
+        "outputs": [
+          "{workspaceRoot}/apps/api/test-output/jest/integration-coverage"
+        ],
         "options": {
           "jestConfig": "apps/api/jest.integration.config.cts",
           "passWithNoTests": true
+        }
+      },
+      "db:migrate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "drizzle-kit migrate",
+          "cwd": "{workspaceRoot}"
+        }
+      },
+      "db:generate": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "drizzle-kit generate",
+          "cwd": "{workspaceRoot}"
+        }
+      },
+      "db:studio": {
+        "executor": "nx:run-commands",
+        "continuous": true,
+        "options": {
+          "command": "drizzle-kit studio",
+          "cwd": "{workspaceRoot}"
         }
       }
     }

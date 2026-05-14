@@ -12,7 +12,21 @@ This project uses a GitHub-native issue-to-PR workflow. The agent has access to 
    - Implements the work following the standards in `coding-standards.md`
    - Follows the feature workflow in `feature-workflow.md` (tests, passing, spec doc)
    - Opens a PR that references the issue (`Closes #42` in the body)
+   - **Polls CI until it passes or fails** — does not notify the user until CI is green
+   - If CI fails, diagnoses and fixes the failure, then waits for the next run
 4. **You review the PR** and merge when satisfied
+
+## CI Polling
+
+After opening a PR, the agent polls the GitHub API every 30 seconds until all checks complete:
+
+```
+GET /repos/{owner}/{repo}/actions/runs?branch={branch}&per_page=1
+```
+
+- If the run **passes** → notify the user with the PR URL
+- If the run **fails** → fetch the job logs, diagnose, fix, push, and wait for the next run
+- If CI is still queued/in progress → keep polling (up to 15 minutes before timing out and flagging to the user)
 
 ## Writing a Good Issue
 
@@ -28,20 +42,14 @@ The more precise the issue, the less back-and-forth. Think of it as the spec in 
 
 The GitHub MCP server supports:
 
-| Operation | What the agent can do |
-|---|---|
-| Issues | Create, read, update, close, label, assign |
-| Pull Requests | Create, read, update, add reviewers |
-| Branches | Create from any ref |
-| Files | Read, create, update (single or batch commit) |
-| Repo | Read structure, search code |
+| Operation     | What the agent can do                         |
+| ------------- | --------------------------------------------- |
+| Issues        | Create, read, update, close, label, assign    |
+| Pull Requests | Create, read, update, add reviewers           |
+| Branches      | Create from any ref                           |
+| Files         | Read, create, update (single or batch commit) |
+| Repo          | Read structure, search code                   |
 
 ## Setup
 
-The MCP server requires a GitHub Personal Access Token with `repo` scope:
-
-Add it to your `.env` file (copied from `.env.example`):
-
-```bash
-GITHUB_PERSONAL_ACCESS_TOKEN=ghp_...
-```
+GitHub access is provided via the native Claude GitHub connector. No additional configuration needed in this project.
