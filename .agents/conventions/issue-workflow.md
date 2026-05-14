@@ -12,7 +12,21 @@ This project uses a GitHub-native issue-to-PR workflow. The agent has access to 
    - Implements the work following the standards in `coding-standards.md`
    - Follows the feature workflow in `feature-workflow.md` (tests, passing, spec doc)
    - Opens a PR that references the issue (`Closes #42` in the body)
+   - **Polls CI until it passes or fails** — does not notify the user until CI is green
+   - If CI fails, diagnoses and fixes the failure, then waits for the next run
 4. **You review the PR** and merge when satisfied
+
+## CI Polling
+
+After opening a PR, the agent polls the GitHub API every 30 seconds until all checks complete:
+
+```
+GET /repos/{owner}/{repo}/actions/runs?branch={branch}&per_page=1
+```
+
+- If the run **passes** → notify the user with the PR URL
+- If the run **fails** → fetch the job logs, diagnose, fix, push, and wait for the next run
+- If CI is still queued/in progress → keep polling (up to 15 minutes before timing out and flagging to the user)
 
 ## Writing a Good Issue
 
