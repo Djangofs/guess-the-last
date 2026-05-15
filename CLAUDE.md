@@ -28,9 +28,10 @@
 
 ## Mandatory Pre-Commit Checklist
 
-Before committing **any** code change, always run lint first and fix all failures before proceeding:
+Before committing **any** code change, always run format check and lint first and fix all failures before proceeding:
 
 ```bash
+npm exec -- nx format:check
 npm exec -- nx affected --target=lint --base=main
 ```
 

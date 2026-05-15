@@ -24,9 +24,10 @@ Do not leave failing tests. If a pre-existing test breaks due to the change, fix
 
 ## 3. Lint
 
-Run lint on affected projects and fix all failures before committing:
+Run format check and lint on affected projects and fix all failures before committing:
 
 ```bash
+npm exec -- nx format:check
 npm exec -- nx affected --target=lint --base=main
 ```
 
