@@ -26,26 +26,63 @@
 
 > For full context (domain rules, architecture, conventions), see `.agents/`.
 
-## Mandatory Pre-Commit Checklist
+## Feature Implementation Checklist
 
-Before committing **any** code change, always run format check and lint first and fix all failures before proceeding:
+When implementing any feature or fix, complete every step in order. Do not skip steps or report the task as complete until all are done.
+
+### 1. Write tests
+
+- Unit tests for any new functions, services, or components
+- Integration tests for any new API routes (requires DB)
+- E2E tests for new user-facing flows (when applicable)
+- See `.agents/conventions/coding-standards.md` for which test type to write
+
+### 2. Follow coding standards
+
+- Use arrow functions — never `function` declarations
+- See `.agents/conventions/coding-standards.md` for the full list
+
+### 3. Make tests pass
+
+```bash
+npm exec nx test api          # backend unit tests
+npm exec nx test web          # frontend unit tests
+npm exec nx integration-test api  # integration tests (requires DB)
+```
+
+Do not proceed if tests are failing.
+
+### 4. Format and lint
 
 ```bash
 npm exec -- nx format:check
 npm exec -- nx affected --target=lint --base=main
 ```
 
-Do not commit if lint fails. Fix the errors, then commit.
+Fix all failures before committing.
 
-## Mandatory Post-Push Rule
+### 5. Commit and push
 
-After every `git push`, always invoke the `monitor-ci` skill to track the CI pipeline result:
+### 6. Invoke monitor-ci
+
+After every `git push`, invoke the `monitor-ci` skill:
 
 ```
 /monitor-ci
 ```
 
-Do not report a task as complete until CI passes on the pushed branch.
+Do not report the task as complete until CI passes.
+
+### 7. Write the spec doc
+
+Create or update `.agents/specs/<feature-name>.md` covering:
+
+- **What it does**: plain-English description
+- **Scope**: files/modules involved
+- **API contract**: any endpoints added or changed
+- **Edge cases**: known constraints or special handling
+
+See `.agents/conventions/feature-workflow.md` for the full format.
 
 ## Monorepo Layout
 

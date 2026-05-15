@@ -1,7 +1,11 @@
 import { timingSafeEqual } from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 
-export const requireApiKey = (req: Request, res: Response, next: NextFunction) => {
+export const requireApiKey = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const secret = process.env.API_SECRET;
 
   if (!secret) {
@@ -28,4 +32,4 @@ export const requireApiKey = (req: Request, res: Response, next: NextFunction) =
   }
 
   next();
-}
+};

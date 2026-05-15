@@ -11,12 +11,12 @@ Protects admin API routes with a static Bearer token and guards all routes again
 
 ## Scope
 
-| File | Role |
-|---|---|
-| `apps/api/src/app/middleware/require-api-key.ts` | `requireApiKey` Express middleware |
-| `apps/api/src/app/middleware/rate-limit.ts` | `standardLimiter`, `strictLimiter`, and their exported option objects |
-| `apps/api/src/main.ts` | Mounts `standardLimiter` globally; emits startup warning if `API_SECRET` unset |
-| `.env.example` | Documents `API_SECRET` variable |
+| File                                             | Role                                                                           |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `apps/api/src/app/middleware/require-api-key.ts` | `requireApiKey` Express middleware                                             |
+| `apps/api/src/app/middleware/rate-limit.ts`      | `standardLimiter`, `strictLimiter`, and their exported option objects          |
+| `apps/api/src/main.ts`                           | Mounts `standardLimiter` globally; emits startup warning if `API_SECRET` unset |
+| `.env.example`                                   | Documents `API_SECRET` variable                                                |
 
 ## API contract
 
@@ -30,11 +30,13 @@ router.post('/replays/import', strictLimiter, requireApiKey, handler);
 ```
 
 **401 response** (missing/wrong token):
+
 ```json
 { "error": "Unauthorized" }
 ```
 
 **429 response** (rate limit exceeded):
+
 ```json
 { "error": "Too many requests, please try again later." }
 ```

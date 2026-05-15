@@ -12,7 +12,7 @@ const makeRes = () => {
     json: jest.fn().mockReturnThis(),
   } as unknown as Response;
   return res;
-}
+};
 
 describe('requireApiKey', () => {
   const next: NextFunction = jest.fn();
