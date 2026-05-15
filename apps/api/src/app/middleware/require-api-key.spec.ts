@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { requireApiKey } from './require-api-key';
 
-function makeReq(authHeader?: string): Request {
-  return {
+const makeReq = (authHeader?: string): Request =>
+  ({
     headers: authHeader ? { authorization: authHeader } : {},
-  } as unknown as Request;
-}
+  }) as unknown as Request;
 
-function makeRes() {
+const makeRes = () => {
   const res = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
