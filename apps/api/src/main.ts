@@ -1,8 +1,8 @@
 import express from 'express';
 import { createDb, createPool } from './app/db/client';
 import { standardLimiter } from './app/middleware/rate-limit';
-import { createReplayRepository } from './app/replays/replay-repository';
 import { createReplayRouter } from './app/replays/replay-router';
+import { createReplayService } from './app/replays/replay-service';
 
 if (!process.env.API_SECRET) {
   console.warn(
@@ -18,13 +18,12 @@ const databaseUrl =
 
 const pool = createPool(databaseUrl);
 const db = createDb(pool);
-const replayRepo = createReplayRepository(db);
 
 const app = express();
 app.use(express.json());
 app.use(standardLimiter);
 
-app.use('/api', createReplayRouter(replayRepo));
+app.use('/api', createReplayRouter(createReplayService(db)));
 
 app.get('/', (req, res) => {
   res.send({ message: 'Hello API' });

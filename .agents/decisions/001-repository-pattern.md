@@ -14,18 +14,18 @@ This works but has a cost: the service is coupled to Drizzle's API surface and t
 All database access is encapsulated behind a **repository interface**. The service depends on the interface, not on Drizzle or the schema directly.
 
 ```
-router → service(repo) → ReplayRepository (interface)
-                                ↓
-                     DrizzleReplayRepository (impl)
-                                ↓
-                              Drizzle / Postgres
+main.ts  →  createReplayService(db)
+router   →  ReplayService (interface only)
+service  →  ReplayRepository (creates it internally from db)
+repo     →  Drizzle / Postgres
 ```
 
-Each feature area gets its own repository file:
+Each feature area gets two files:
 
-- `replay-repository.ts` — defines `ReplayRepository` interface + `createReplayRepository(db)` factory
+- `replay-repository.ts` — `ReplayRepository` interface + `createReplayRepository(db)` factory
+- `replay-service.ts` — `ReplayService` interface + `createReplayService(db)` factory (creates the repo internally)
 
-The router receives a repository instance (created in `main.ts`) and passes it to the service. The service is a pure function of the repository interface and has no import of Drizzle or schema.
+`main.ts` only imports service factories. The router only imports service interfaces. The repository is an internal detail of the service layer — it is never imported by routers or `main.ts`.
 
 ## Consequences
 

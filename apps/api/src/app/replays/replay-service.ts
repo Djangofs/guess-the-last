@@ -1,5 +1,20 @@
-import { ReplayRepository } from './replay-repository';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as schema from '../db/schema';
+import { ReplayRepository, createReplayRepository } from './replay-repository';
 import { parseReplayLog } from './parse-replay-log';
+
+type Db = NodePgDatabase<typeof schema>;
+
+export interface ImportResult {
+  imported: number;
+  skipped: number;
+  failed: number;
+  errors: string[];
+}
+
+export interface ReplayService {
+  importReplays(urls: string[]): Promise<ImportResult>;
+}
 
 const extractFormat = (url: string): string => {
   const slug = url.split('/').pop() ?? '';
@@ -15,14 +30,7 @@ const fetchReplayLog = async (url: string): Promise<{ log: string }> => {
   return { log: data.log };
 };
 
-export interface ImportResult {
-  imported: number;
-  skipped: number;
-  failed: number;
-  errors: string[];
-}
-
-export const importReplays = async (
+const importReplays = async (
   repo: ReplayRepository,
   urls: string[],
 ): Promise<ImportResult> => {
@@ -81,4 +89,11 @@ export const importReplays = async (
   }
 
   return { imported, skipped, failed, errors };
+};
+
+export const createReplayService = (db: Db): ReplayService => {
+  const repo = createReplayRepository(db);
+  return {
+    importReplays: (urls) => importReplays(repo, urls),
+  };
 };

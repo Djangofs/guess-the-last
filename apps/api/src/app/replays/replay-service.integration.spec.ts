@@ -1,8 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { createDb, createPool } from '../db/client';
 import * as schema from '../db/schema';
-import { createReplayRepository } from './replay-repository';
-import { importReplays } from './replay-service';
+import { createReplayService } from './replay-service';
 
 const DATABASE_URL =
   process.env['DATABASE_URL'] ??
@@ -43,7 +42,7 @@ const FAKE_URL = 'https://replay.pokemonshowdown.com/smogtours-gen4ou-999999';
 describe('importReplays (integration)', () => {
   const pool = createPool(DATABASE_URL);
   const db = createDb(pool);
-  const repo = createReplayRepository(db);
+  const service = createReplayService(db);
 
   beforeAll(async () => {
     await db
@@ -80,7 +79,7 @@ describe('importReplays (integration)', () => {
   });
 
   it('imports a replay URL and persists two teams in reveal order', async () => {
-    const result = await importReplays(repo, [FAKE_URL]);
+    const result = await service.importReplays([FAKE_URL]);
 
     expect(result.imported).toBe(1);
     expect(result.skipped).toBe(0);
@@ -109,8 +108,8 @@ describe('importReplays (integration)', () => {
   });
 
   it('skips already-imported URLs without error', async () => {
-    await importReplays(repo, [FAKE_URL]);
-    const second = await importReplays(repo, [FAKE_URL]);
+    await service.importReplays([FAKE_URL]);
+    const second = await service.importReplays([FAKE_URL]);
 
     expect(second.imported).toBe(0);
     expect(second.skipped).toBe(1);
