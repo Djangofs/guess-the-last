@@ -19,7 +19,7 @@ async function seed() {
   const db = createDb(pool);
 
   const data: PokemonRecord[] = JSON.parse(
-    readFileSync(join(__dirname, 'pokemon-data.json'), 'utf-8')
+    readFileSync(join(__dirname, 'pokemon-data.json'), 'utf-8'),
   );
 
   console.log(`Seeding ${data.length} Pokémon...`);
@@ -32,7 +32,7 @@ async function seed() {
         name: p.name,
         types: p.types,
         spriteUrl: p.spriteUrl,
-      }))
+      })),
     )
     .onConflictDoNothing();
 
