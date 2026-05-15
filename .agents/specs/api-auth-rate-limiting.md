@@ -41,6 +41,16 @@ router.post('/replays/import', strictLimiter, requireApiKey, handler);
 
 Rate limit headers (`RateLimit-*`, draft-7 standard) are included in all responses.
 
+## Pending wiring
+
+`requireApiKey` is not yet applied to any route — there are no admin routes in the current API. It must be wired up when implementing the first admin route (`POST /api/replays/import`, issue #9). The pattern is:
+
+```typescript
+router.post('/replays/import', strictLimiter, requireApiKey, handler);
+```
+
+`strictLimiter` is similarly unused until then.
+
 ## Edge cases
 
 - If `API_SECRET` is not set, `requireApiKey` rejects all requests — it never silently allows through.
