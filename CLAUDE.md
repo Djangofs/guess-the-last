@@ -24,7 +24,27 @@
 
 # Guess the Last Pokemon — Project Context
 
-> For full context (domain rules, architecture, conventions), see `agents/`.
+> For full context (domain rules, architecture, conventions), see `.agents/`.
+
+## Mandatory Pre-Commit Checklist
+
+Before committing **any** code change, always run lint first and fix all failures before proceeding:
+
+```bash
+npm exec -- nx affected --target=lint --base=main
+```
+
+Do not commit if lint fails. Fix the errors, then commit.
+
+## Mandatory Post-Push Rule
+
+After every `git push`, always invoke the `monitor-ci` skill to track the CI pipeline result:
+
+```
+/monitor-ci
+```
+
+Do not report a task as complete until CI passes on the pushed branch.
 
 ## Monorepo Layout
 
@@ -70,6 +90,12 @@ This project requires Node 22+. Use `nvm use 22` before running any commands.
 ## Environment Setup
 
 Copy `.env.example` to `.env` and start Docker before running the API locally.
+
+After cloning, configure git to use the project's hooks directory (one-time):
+
+```bash
+git config core.hooksPath .githooks
+```
 
 ## Import Alias
 

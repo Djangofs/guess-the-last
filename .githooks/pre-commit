@@ -1,0 +1,3 @@
+#!/bin/sh
+# Run lint on projects affected relative to main before every commit.
+npm exec -- nx affected --target=lint --base=main
