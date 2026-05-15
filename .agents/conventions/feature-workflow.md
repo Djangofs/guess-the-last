@@ -21,7 +21,15 @@ npm exec nx integration-test api  # backend integration tests (requires DB)
 
 Do not leave failing tests. If a pre-existing test breaks due to the change, fix it.
 
-## 3. Document the Feature
+## 3. Lint
+
+Run lint on affected projects and fix all failures before committing:
+
+```bash
+npm exec -- nx affected --target=lint --base=main
+```
+
+## 4. Document the Feature
 
 Create or update a spec file in `.agents/specs/`. Each feature gets its own file named after the feature (e.g. `.agents/specs/pokemon-search.md`).
 
