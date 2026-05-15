@@ -131,6 +131,20 @@
           "command": "drizzle-kit studio",
           "cwd": "{workspaceRoot}"
         }
+      },
+      "db:seed": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node --require @swc-node/register apps/api/src/app/db/seed.ts",
+          "cwd": "{workspaceRoot}"
+        }
+      },
+      "db:fetch-pokemon": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node --require @swc-node/register apps/api/src/app/db/fetch-pokemon.ts",
+          "cwd": "{workspaceRoot}"
+        }
       }
     }
   },
