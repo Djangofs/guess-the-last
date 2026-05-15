@@ -6,15 +6,15 @@ Introduces a lower-level primitive — a **team** as it was revealed during a ba
 
 ## Scope
 
-| Area | Files |
-|---|---|
-| DB schema | `apps/api/src/app/db/schema.ts` |
-| Migration | `apps/api/src/app/db/migrations/0001_shallow_liz_osborn.sql` |
-| Log parser | `apps/api/src/app/replays/parse-replay-log.ts` |
-| Service | `apps/api/src/app/replays/replay-service.ts` |
-| Route | `apps/api/src/app/replays/replay-router.ts` |
-| Shared types | `libs/shared-types/src/lib/shared-types.ts` |
-| Entry point | `apps/api/src/main.ts` |
+| Area         | Files                                                        |
+| ------------ | ------------------------------------------------------------ |
+| DB schema    | `apps/api/src/app/db/schema.ts`                              |
+| Migration    | `apps/api/src/app/db/migrations/0001_shallow_liz_osborn.sql` |
+| Log parser   | `apps/api/src/app/replays/parse-replay-log.ts`               |
+| Service      | `apps/api/src/app/replays/replay-service.ts`                 |
+| Route        | `apps/api/src/app/replays/replay-router.ts`                  |
+| Shared types | `libs/shared-types/src/lib/shared-types.ts`                  |
+| Entry point  | `apps/api/src/main.ts`                                       |
 
 ## API Contract
 
@@ -23,11 +23,13 @@ Introduces a lower-level primitive — a **team** as it was revealed during a ba
 Protected by `requireApiKey` (Bearer token) and `strictLimiter` (10 req / 15 min).
 
 **Request**
+
 ```json
 { "urls": ["https://replay.pokemonshowdown.com/smogtours-gen4ou-900386"] }
 ```
 
 **Response 200**
+
 ```json
 { "imported": 1, "skipped": 0, "failed": 0, "errors": [] }
 ```
@@ -37,21 +39,23 @@ Protected by `requireApiKey` (Bearer token) and `strictLimiter` (10 req / 15 min
 ## Data Model
 
 ### `replay`
-| Column | Type | Notes |
-|---|---|---|
-| `id` | `uuid` PK | |
-| `replay_url` | `text` UNIQUE NOT NULL | Full URL |
-| `format` | `text` NOT NULL | Extracted from URL slug, e.g. `gen4ou` |
-| `imported_at` | `timestamp` NOT NULL DEFAULT NOW() | |
+
+| Column        | Type                               | Notes                                  |
+| ------------- | ---------------------------------- | -------------------------------------- |
+| `id`          | `uuid` PK                          |                                        |
+| `replay_url`  | `text` UNIQUE NOT NULL             | Full URL                               |
+| `format`      | `text` NOT NULL                    | Extracted from URL slug, e.g. `gen4ou` |
+| `imported_at` | `timestamp` NOT NULL DEFAULT NOW() |                                        |
 
 ### `team`
-| Column | Type | Notes |
-|---|---|---|
-| `id` | `uuid` PK | |
-| `replay_id` | `uuid` NOT NULL REFERENCES `replay(id)` | |
-| `player` | `text` NOT NULL | `"p1"` or `"p2"` |
-| `pokemon_ids` | `integer[]` NOT NULL | Ordered by first reveal |
-| `created_at` | `timestamp` NOT NULL DEFAULT NOW() | |
+
+| Column        | Type                                    | Notes                   |
+| ------------- | --------------------------------------- | ----------------------- |
+| `id`          | `uuid` PK                               |                         |
+| `replay_id`   | `uuid` NOT NULL REFERENCES `replay(id)` |                         |
+| `player`      | `text` NOT NULL                         | `"p1"` or `"p2"`        |
+| `pokemon_ids` | `integer[]` NOT NULL                    | Ordered by first reveal |
+| `created_at`  | `timestamp` NOT NULL DEFAULT NOW()      |                         |
 
 ## Edge Cases
 

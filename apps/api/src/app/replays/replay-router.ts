@@ -4,7 +4,6 @@ import * as schema from '../db/schema';
 import { requireApiKey } from '../middleware/require-api-key';
 import { strictLimiter } from '../middleware/rate-limit';
 import { importReplays } from './replay-service';
-import { ImportReplaysRequest } from '@guess-the-last/shared-types';
 
 type Db = NodePgDatabase<typeof schema>;
 
@@ -16,7 +15,7 @@ export const createReplayRouter = (db: Db) => {
     strictLimiter,
     requireApiKey,
     async (req, res) => {
-      const body = req.body as ImportReplaysRequest;
+      const body = req.body as { urls: string[] };
 
       if (!Array.isArray(body?.urls) || body.urls.length === 0) {
         res.status(400).json({ error: 'urls must be a non-empty array' });
