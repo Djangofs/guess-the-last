@@ -48,10 +48,12 @@ async function fetchAll() {
         name: p.name,
         types: p.types.map((t) => t.type.name),
         spriteUrl: `${SPRITE_BASE}/${p.id}.png`,
-      }))
+      })),
     );
 
-    console.log(`  ${records.length}/${GEN_1_4_COUNT} (ids ${ids[0]}–${ids[ids.length - 1]})`);
+    console.log(
+      `  ${records.length}/${GEN_1_4_COUNT} (ids ${ids[0]}–${ids[ids.length - 1]})`,
+    );
 
     if (end < GEN_1_4_COUNT) await sleep(DELAY_MS);
   }
