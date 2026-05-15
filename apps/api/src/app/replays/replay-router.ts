@@ -1,13 +1,10 @@
 import { Router } from 'express';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../db/schema';
 import { requireApiKey } from '../middleware/require-api-key';
 import { strictLimiter } from '../middleware/rate-limit';
+import { ReplayRepository } from './replay-repository';
 import { importReplays } from './replay-service';
 
-type Db = NodePgDatabase<typeof schema>;
-
-export const createReplayRouter = (db: Db) => {
+export const createReplayRouter = (repo: ReplayRepository) => {
   const router = Router();
 
   router.post(
@@ -22,7 +19,7 @@ export const createReplayRouter = (db: Db) => {
         return;
       }
 
-      const result = await importReplays(db, body.urls);
+      const result = await importReplays(repo, body.urls);
       res.json(result);
     },
   );

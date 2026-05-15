@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { createDb, createPool } from '../db/client';
 import * as schema from '../db/schema';
+import { createReplayRepository } from './replay-repository';
 import { importReplays } from './replay-service';
 
 const DATABASE_URL =
@@ -42,6 +43,7 @@ const FAKE_URL = 'https://replay.pokemonshowdown.com/smogtours-gen4ou-999999';
 describe('importReplays (integration)', () => {
   const pool = createPool(DATABASE_URL);
   const db = createDb(pool);
+  const repo = createReplayRepository(db);
 
   beforeAll(async () => {
     await db
@@ -58,9 +60,6 @@ describe('importReplays (integration)', () => {
   });
 
   afterAll(async () => {
-    await db.delete(schema.team);
-    await db.delete(schema.replay);
-    await db.delete(schema.pokemon).where(eq(schema.pokemon.id, BASE_ID));
     for (let i = 0; i < ALL_NAMES.length; i++) {
       await db.delete(schema.pokemon).where(eq(schema.pokemon.id, BASE_ID + i));
     }
@@ -70,6 +69,7 @@ describe('importReplays (integration)', () => {
   afterEach(async () => {
     await db.delete(schema.team);
     await db.delete(schema.replay);
+    jest.restoreAllMocks();
   });
 
   beforeEach(() => {
@@ -79,12 +79,8 @@ describe('importReplays (integration)', () => {
     } as Response);
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it('imports a replay URL and persists two teams in reveal order', async () => {
-    const result = await importReplays(db, [FAKE_URL]);
+    const result = await importReplays(repo, [FAKE_URL]);
 
     expect(result.imported).toBe(1);
     expect(result.skipped).toBe(0);
@@ -106,8 +102,6 @@ describe('importReplays (integration)', () => {
 
     const p1 = teams.find((t) => t.player === 'p1');
     const p2 = teams.find((t) => t.player === 'p2');
-    expect(p1?.pokemonIds).toHaveLength(6);
-    expect(p2?.pokemonIds).toHaveLength(6);
     expect(p1?.pokemonIds).toEqual(P1_NAMES.map((_, i) => BASE_ID + i));
     expect(p2?.pokemonIds).toEqual(
       P2_NAMES.map((_, i) => BASE_ID + P1_NAMES.length + i),
@@ -115,8 +109,8 @@ describe('importReplays (integration)', () => {
   });
 
   it('skips already-imported URLs without error', async () => {
-    await importReplays(db, [FAKE_URL]);
-    const second = await importReplays(db, [FAKE_URL]);
+    await importReplays(repo, [FAKE_URL]);
+    const second = await importReplays(repo, [FAKE_URL]);
 
     expect(second.imported).toBe(0);
     expect(second.skipped).toBe(1);
