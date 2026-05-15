@@ -16,3 +16,20 @@ export const game = pgTable('game', {
     .notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const replay = pgTable('replay', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  replayUrl: text('replay_url').unique().notNull(),
+  format: text('format').notNull(),
+  importedAt: timestamp('imported_at').defaultNow().notNull(),
+});
+
+export const team = pgTable('team', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  replayId: uuid('replay_id')
+    .references(() => replay.id)
+    .notNull(),
+  player: text('player').notNull(),
+  pokemonIds: integer('pokemon_ids').array().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
