@@ -1,3 +1,4 @@
 #!/bin/sh
-# Run lint on projects affected relative to main before every commit.
+# Run format check and lint on affected projects before every commit.
+npm exec -- nx format:check
 npm exec -- nx affected --target=lint --base=main
